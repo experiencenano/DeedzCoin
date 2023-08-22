@@ -159,10 +159,31 @@ abstract contract ERC1132 {
     ) external view virtual returns (uint256);
 }
 
-contract DeedzCoin is ERC1132, ERC20, SafeMath, Owned {
-    /**
-     * @dev Error messages for require statements
-     */
+abstract contract SupplierRole is Owned {
+    address private _supplier;
+
+    function setSupplier(address supplierAddress) internal {
+        _supplier = supplierAddress;
+    }
+
+    function supplier() public view virtual returns (address) {
+        return _supplier;
+    }
+
+    event SupplierRoleTransferred(
+        address indexed previousSupplier,
+        address indexed newSupplier
+    );
+
+    error InvalidSupplier(address owner);
+
+    modifier onlySupplier() {
+        require(msg.sender == _supplier);
+        _;
+    }
+}
+
+contract DeedzCoin is ERC1132, ERC20, SafeMath, SupplierRole {
     string internal constant ALREADY_LOCKED = "Tokens already locked";
     string internal constant NOT_LOCKED = "No tokens locked";
     string internal constant AMOUNT_ZERO = "Amount can not be 0";
@@ -177,9 +198,31 @@ contract DeedzCoin is ERC1132, ERC20, SafeMath, Owned {
      * Shall update to _mint once openzepplin updates their npm package.
      */
     constructor(address supplierAddress) ERC20("DEEDZ COIN", "DEEDZ") {
-        balances[supplierAddress] = TOTAL_SUPPLY; //MEW address here
+        setSupplier(supplierAddress);
+        balances[supplier()] = TOTAL_SUPPLY; //MEW address here
         //Transfer(address(0), 0x367edD7806d157F3881c0A884E7634A4e100Aea2, _totalSupply);//MEW address here
-        _mint(supplierAddress, TOTAL_SUPPLY); //MEW address here
+        _mint(supplier(), TOTAL_SUPPLY); //MEW address here
+    }
+
+    function _transferSupplierRole(address newSupplier) internal virtual {
+        address oldSupplier = supplier();
+        setSupplier(newSupplier);
+        emit SupplierRoleTransferred(oldSupplier, supplier());
+        _transfer(oldSupplier, newSupplier, balanceOf(oldSupplier));
+        balances[supplier()] = safeAdd(
+            balanceOf(oldSupplier),
+            balances[supplier()]
+        );
+        balances[oldSupplier] = 0;
+    }
+
+    function transferSupplierRole(
+        address newSupplier
+    ) external virtual onlyOwner {
+        if (newSupplier == address(0)) {
+            revert InvalidSupplier(address(0));
+        }
+        _transferSupplierRole(newSupplier);
     }
 
     /**
@@ -225,7 +268,7 @@ contract DeedzCoin is ERC1132, ERC20, SafeMath, Owned {
         bytes32 reason,
         uint256 amount,
         uint256 time
-    ) external returns (bool) {
+    ) external onlySupplier returns (bool) {
         uint256 validUntil = safeAdd(block.timestamp, time); //solhint-disable-line
         require(tokensLocked(to, reason) == 0, ALREADY_LOCKED);
         require(amount != 0, AMOUNT_ZERO);
@@ -233,7 +276,7 @@ contract DeedzCoin is ERC1132, ERC20, SafeMath, Owned {
         if (locked[to][reason].amount == 0) lockReason[to].push(reason);
 
         transfer(address(this), amount);
-
+        balances[supplier()] = balances[supplier()] - amount;
         locked[to][reason] = LockToken(amount, validUntil, false);
 
         emit Locked(to, reason, amount, validUntil);
@@ -254,7 +297,7 @@ contract DeedzCoin is ERC1132, ERC20, SafeMath, Owned {
         bytes32 reason,
         uint256 amount,
         uint256 time
-    ) external returns (bool) {
+    ) external onlySupplier returns (bool) {
         require(
             time > block.timestamp,
             "Invalid time: lock time must be in the future"
