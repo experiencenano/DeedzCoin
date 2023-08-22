@@ -8,13 +8,30 @@ The DeedzCoin smart contract is a decentralized application (DApp) written in So
 
 Users can transfer DeedzCoin tokens to other addresses.
 
-### Token Locking
+### Token Locking by Supplier
 
-Users can lock a specified amount of tokens for a specified duration, preventing them from being transferred until the lock expires.
+The supplier, a role with special privileges, can lock a specified amount of tokens for a specified duration, preventing them from being transferred until the lock expires. This functionality is enhanced with more control and flexibility.
 
-### Locking with Actual Time
+### Locking with Actual Time by Supplier
 
-Users can also lock tokens until a specific timestamp, ensuring they remain locked until that time.
+The supplier can also lock tokens until a specific timestamp, ensuring they remain locked until that time.
+
+### Supplier Role
+
+The contract introduces a "supplier" role with special privileges, including the ability to transfer tokens while locking them and managing the distribution of tokens.
+
+### Locking Enhancements
+
+The supplier can extend the lock duration for a specific reason and increase the number of tokens locked for a reason.
+
+### Unlockable Tokens and Unlock Function
+
+The contract introduces the concept of "unlockable" tokens that can be claimed by users after passing their lock validity period. The `unlock` function allows users to claim these unlockable tokens.
+
+### Get Unlockable Tokens Function
+
+Users can query the contract to get the total number of unlockable tokens they have across all lock reasons.
+
 
 ## Usage
 
