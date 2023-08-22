@@ -37,13 +37,42 @@ Users can query the contract to get the total number of unlockable tokens they h
 
 To use the DeedzCoin smart contract, follow these steps:
 
-1. Deploy the smart contract to an Ethereum network of your choice (e.g., mainnet, testnet, or a local development network).
-2. Interact with the deployed contract using an Ethereum wallet or DApp browser.
-3. Use the following functions to interact with the DeedzCoin tokens:
-   - `transfer`: Transfer DeedzCoin tokens to another address.
-   - `transferWithLock`: Transfer and lock a specified amount of tokens for a specified reason and duration.
-   - `transferWithLockActualTime`: Transfer and lock a specified amount of tokens until a specific timestamp.
-4. Monitor events emitted by the contract to track token transfers and locking events.
+
+1. **Deployment**:
+   - Deploy the smart contract to an Ethereum network of your choice, such as mainnet, testnet, or a local development network.
+
+2. **Interaction**:
+   - Interact with the deployed contract using an Ethereum wallet or DApp browser.
+
+3. **Functions**:
+   Use the following functions to interact with the DeedzCoin tokens:
+
+   - **Transfer Function** (`transfer`):
+     - Transfer DeedzCoin tokens to another address.
+
+   - **Token Locking by Supplier** (`transferWithLock`):
+     - Transfer and lock a specified amount of tokens for a specified reason and duration.
+     - This function is exclusively available to the supplier.
+
+   - **Token Locking by Supplier with Actual Time** (`transferWithLockActualTime`):
+     - Transfer and lock a specified amount of tokens until a specific timestamp.
+     - Only the supplier can utilize this function.
+
+   - **Locking Enhancements by Supplier**:
+     - Extend the lock duration for a specific reason and time.
+     - Increase the number of tokens locked for a specific reason.
+     - Both of these functions are restricted to the supplier.
+
+   - **Unlock Function** (`unlock`):
+     - Claim unlockable tokens that have passed their lock validity period.
+     - Only the supplier can perform this action.
+
+   - **Get Unlockable Tokens Function** (`getUnlockableTokens`):
+     - Query the total number of unlockable tokens a user has.
+
+4. **Event Monitoring**:
+   - Monitor events emitted by the contract to track token transfers and locking events.
+
 
 ## Development
 
