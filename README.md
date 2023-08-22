@@ -48,7 +48,7 @@ The DeedzCoin smart contract is released under the MIT License.
 ## Acknowledgments
 This smart contract was developed based on the OpenZeppelin framework, a widely adopted library for secure smart contract development on Ethereum.
 
-Feel free to customize the README file according to your project's specific requirements and guidelines. Remember to include relevant information about deployment, testing, and any additional features or functions unique to your implementation of the DeedzCoin smart contract.
+
    
  
    
