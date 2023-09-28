@@ -2,44 +2,64 @@
 
 The DeedzCoin smart contract is a decentralized application (DApp) written in Solidity, the programming language for Ethereum smart contracts. It serves as the underlying code for the DeedzCoin cryptocurrency, enabling token transfers and locking functionality.
 
-## Features
+# Specifications
+### Project Overview
+The Deedz Coin Smart Contract is designed to manage token locking functionality and extends the functionality of the ERC20, Ownable, and SupplierRole contracts. Its primary purpose is to provide a secure and flexible mechanism for locking and distributing tokens. This contract is essential for various use cases, including team token vesting, partnership lock-up agreements, and community token rewards, where tokens need to be locked for specific periods to achieve specific project objectives.
 
-### Token Transfers
+### Functional, Technical Details and Requirements
+Functional and Technical Details can be found in the [Details.pdf](./docs/Details.pdf) document.
 
-Users can transfer DeedzCoin tokens to other addresses.
+## Getting Started
+```bash
+# install dependencies
+$ npm install
 
-### Token Locking
+# run tests
+$ npm run test
+```
 
-Users can lock a specified amount of tokens for a specified duration, preventing them from being transferred until the lock expires.
-
-### Locking with Actual Time
-
-Users can also lock tokens until a specific timestamp, ensuring they remain locked until that time.
+## Deployment
+1. Deploy DeedzCoin on your Ethereum network.
+2. Specify the initial supplier address during deployment.
 
 ## Usage
-
 To use the DeedzCoin smart contract, follow these steps:
 
-1. Deploy the smart contract to an Ethereum network of your choice (e.g., mainnet, testnet, or a local development network).
-2. Interact with the deployed contract using an Ethereum wallet or DApp browser.
-3. Use the following functions to interact with the DeedzCoin tokens:
-   - `transfer`: Transfer DeedzCoin tokens to another address.
-   - `transferWithLock`: Transfer and lock a specified amount of tokens for a specified reason and duration.
-   - `transferWithLockActualTime`: Transfer and lock a specified amount of tokens until a specific timestamp.
-4. Monitor events emitted by the contract to track token transfers and locking events.
+## Ownership
+- The contract owner can transfer the supplier role.
 
-## Development
+## Token Transfers
+- Users can transfer DeedzCoin tokens as per ERC-20 standards.
 
-To contribute to the development of the DeedzCoin smart contract, follow these steps:
+## Supplier Role and Token Locking
+- **Supplier Role:** The contract introduces a "supplier" role with privileges for token management.
+- **Token Locking:** The supplier role can lock tokens for specific reasons, amount, and duration..
+- **Locking Enhancements:** Suppliers can extend lock durations with `extendLock` and increase locked token amounts  with `increaseLockAmount`.
 
-1. Clone the repository and install the necessary dependencies:
+Monitor events emitted by the contract to track token transfers and locking events.
 
-shell
-git clone https://github.com/your-username/deedzcoin.git
-npm install
+## Tests
+Tests are found in the `./test/` folder.
 
-2. Commit and push your changes to your forked repository.
-3. Create a pull request to the original repository, describing your changes and their purpose.
+Tests Error Scenarios can be found in the [Test-Scenarios.pdf](./docs/Tests.pdf) document.
+
+Both positive and negative cases are covered, and test coverage is 100%.
+
+## Contracts
+Solidity smart contracts are found in `./contracts/`.
+
+## Deploy
+Deploy script can be found in the `deploy.js` folder.
+
+Rename `./.env.sample` to `./.env` in the project root.
+To add the Supplier Address, assign the following variable
+```
+SUPPLIER_ADDRESS=...
+```
+example:
+```bash
+$ npm run deploy -- localhost
+```
 
 ## License
 
